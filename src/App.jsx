@@ -1,4 +1,3 @@
-
 import { Link, NavLink, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProductList from './ProductList';
@@ -8,38 +7,30 @@ import './App.css';
 
 function Home() {
   return (
-    <>
-      <main className="hero">
-        <div className="hero-content">
-          <p className="eyebrow">BRING NATURE HOME</p>
-          <h1>Paradise Nursery</h1>
-          <p>
-            Discover beautiful indoor plants and bring freshness,
-            peace, and natural beauty into your home.
-          </p>
-          <Link to="/products" className="primary-button hero-button">
-            Get Started →
-          </Link>
-        </div>
-      </main>
+    <main className="hero">
+      <div className="hero-content">
+        <h1>Paradise Nursery</h1>
 
-      <section className="intro" id="about">
-        <p className="eyebrow">A LITTLE MORE GREEN</p>
-        <h2>Grow Your Own Paradise</h2>
         <p>
-          Find the perfect plants to make every space greener,
-          happier, and more beautiful.
+          Welcome to Paradise Nursery, your destination for beautiful
+          indoor plants. Bring nature into your home with our collection
+          of plants.
         </p>
-        <Link to="/about" className="text-link">
-          Learn About Us →
+
+        <Link
+          to="/products"
+          className="get-started-button"
+        >
+          Get Started
         </Link>
-      </section>
-    </>
+      </div>
+    </main>
   );
 }
 
 function App() {
   const items = useSelector((state) => state.cart.items);
+
   const cartCount = items.reduce(
     (total, item) => total + item.quantity,
     0
@@ -79,9 +70,13 @@ function App() {
       </Routes>
 
       <footer className="footer">
-        <Link to="/" className="footer-logo">🌿 Paradise Nursery</Link>
+        <Link to="/" className="footer-logo">
+          🌿 Paradise Nursery
+        </Link>
         <p>Bringing nature closer to your home.</p>
-        <p>© {new Date().getFullYear()} Paradise Nursery · Student Project</p>
+        <p>
+          © {new Date().getFullYear()} Paradise Nursery · Student Project
+        </p>
       </footer>
     </div>
   );
