@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { removeItem, updateQuantity } from './CartSlice';
 
 function CartItem() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const items = useSelector((state) => state.cart.items);
 
   const totalItems = items.reduce(
@@ -16,7 +17,6 @@ function CartItem() {
     0
   );
 
-  // Increase the quantity of a cart item
   const handleIncrement = (item) => {
     dispatch(
       updateQuantity({
@@ -26,7 +26,6 @@ function CartItem() {
     );
   };
 
-  // Decrease quantity or remove the item when quantity reaches zero
   const handleDecrement = (item) => {
     if (item.quantity <= 1) {
       dispatch(removeItem(item.name));
@@ -40,9 +39,13 @@ function CartItem() {
     }
   };
 
-  // Remove a plant from the cart
   const handleRemove = (item) => {
     dispatch(removeItem(item.name));
+  };
+
+  const handleContinueShopping = (e) => {
+    e.preventDefault();
+    navigate('/products');
   };
 
   if (items.length === 0) {
@@ -52,9 +55,14 @@ function CartItem() {
           <div className="empty-cart-icon">🪴</div>
           <h1>Your cart is waiting to bloom!</h1>
           <p>You haven't added any plants to your cart yet.</p>
-          <Link to="/products" className="primary-button">
+
+          <button
+            type="button"
+            className="get-started-button"
+            onClick={handleContinueShopping}
+          >
             Continue Shopping
-          </Link>
+          </button>
         </div>
       </main>
     );
@@ -69,13 +77,17 @@ function CartItem() {
           <p>{totalItems} plant(s) in your cart</p>
         </div>
 
-        <Link to="/products" className="primary-button">
+        <button
+          type="button"
+          className="get-started-button"
+          onClick={handleContinueShopping}
+        >
           Continue Shopping
-        </Link>
+        </button>
       </div>
 
       <div className="cart-layout">
-        <section className="cart-items">
+        <section className="cart-container">
           {items.map((item) => (
             <article className="cart-item" key={item.id}>
               <img
@@ -89,6 +101,7 @@ function CartItem() {
 
                 <div className="quantity-control">
                   <button
+                    type="button"
                     aria-label={`Decrease ${item.name} quantity`}
                     onClick={() => handleDecrement(item)}
                   >
@@ -98,6 +111,7 @@ function CartItem() {
                   <span>{item.quantity}</span>
 
                   <button
+                    type="button"
                     aria-label={`Increase ${item.name} quantity`}
                     onClick={() => handleIncrement(item)}
                   >
@@ -110,7 +124,8 @@ function CartItem() {
                 </p>
 
                 <button
-                  className="remove-button"
+                  type="button"
+                  className="cart-item-delete"
                   onClick={() => handleRemove(item)}
                 >
                   Delete
@@ -146,7 +161,8 @@ function CartItem() {
           </div>
 
           <button
-            className="primary-button checkout-button"
+            type="button"
+            className="get-started-button1"
             onClick={() =>
               window.alert('Coming Soon! Checkout will be available soon.')
             }
