@@ -1,6 +1,5 @@
-
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { removeItem, updateQuantity } from './CartSlice';
 
 function CartItem() {
@@ -17,6 +16,35 @@ function CartItem() {
     0
   );
 
+  // Increase the quantity of a cart item
+  const handleIncrement = (item) => {
+    dispatch(
+      updateQuantity({
+        id: item.id,
+        quantity: item.quantity + 1,
+      })
+    );
+  };
+
+  // Decrease quantity or remove the item when quantity reaches zero
+  const handleDecrement = (item) => {
+    if (item.quantity <= 1) {
+      dispatch(removeItem(item.name));
+    } else {
+      dispatch(
+        updateQuantity({
+          id: item.id,
+          quantity: item.quantity - 1,
+        })
+      );
+    }
+  };
+
+  // Remove a plant from the cart
+  const handleRemove = (item) => {
+    dispatch(removeItem(item.name));
+  };
+
   if (items.length === 0) {
     return (
       <main className="cart-page">
@@ -25,7 +53,7 @@ function CartItem() {
           <h1>Your cart is waiting to bloom!</h1>
           <p>You haven't added any plants to your cart yet.</p>
           <Link to="/products" className="primary-button">
-            Explore Plants
+            Continue Shopping
           </Link>
         </div>
       </main>
@@ -41,8 +69,8 @@ function CartItem() {
           <p>{totalItems} plant(s) in your cart</p>
         </div>
 
-        <Link to="/products" className="continue-link">
-          ← Continue Shopping
+        <Link to="/products" className="primary-button">
+          Continue Shopping
         </Link>
       </div>
 
@@ -57,19 +85,12 @@ function CartItem() {
 
               <div className="cart-item-details">
                 <h2>{item.name}</h2>
-                <p>₹{item.price} per plant</p>
+                <p>Unit Price: ₹{item.price}</p>
 
                 <div className="quantity-control">
                   <button
                     aria-label={`Decrease ${item.name} quantity`}
-                    onClick={() =>
-                      dispatch(
-                        updateQuantity({
-                          id: item.id,
-                          quantity: item.quantity - 1,
-                        })
-                      )
-                    }
+                    onClick={() => handleDecrement(item)}
                   >
                     −
                   </button>
@@ -78,30 +99,23 @@ function CartItem() {
 
                   <button
                     aria-label={`Increase ${item.name} quantity`}
-                    onClick={() =>
-                      dispatch(
-                        updateQuantity({
-                          id: item.id,
-                          quantity: item.quantity + 1,
-                        })
-                      )
-                    }
+                    onClick={() => handleIncrement(item)}
                   >
                     +
                   </button>
                 </div>
 
+                <p>
+                  Item Subtotal: ₹{item.price * item.quantity}
+                </p>
+
                 <button
                   className="remove-button"
-                  onClick={() => dispatch(removeItem(item.id))}
+                  onClick={() => handleRemove(item)}
                 >
-                  Remove
+                  Delete
                 </button>
               </div>
-
-              <strong className="item-subtotal">
-                ₹{item.price * item.quantity}
-              </strong>
             </article>
           ))}
         </section>
@@ -127,23 +141,21 @@ function CartItem() {
           <hr />
 
           <div className="summary-row summary-total">
-            <span>Total</span>
+            <span>Total Amount</span>
             <span>₹{totalPrice}</span>
           </div>
 
           <button
             className="primary-button checkout-button"
             onClick={() =>
-              window.alert(
-                'Thank you for shopping with Paradise Nursery! Checkout demo only.'
-              )
+              window.alert('Coming Soon! Checkout will be available soon.')
             }
           >
-            Proceed to Checkout
+            Checkout
           </button>
 
           <p className="checkout-note">
-            This is a student project demo. No payment will be taken.
+            Student project demo. No payment will be taken.
           </p>
         </aside>
       </div>
